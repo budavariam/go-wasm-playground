@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAssembly Playground</title>
+</head>
+
+<body>
+    <script src="wasm_exec.js"></script>
+    <script>
+        let goInstance = null;
+
+        async function getGoInstance() {
+            if (!goInstance) {
+                const go = new Go();
+                const response = await fetch('main.wasm');
+                const buffer = await response.arrayBuffer();
+                const { instance } = await WebAssembly.instantiate(buffer, go.importObject);
+                go.run(instance);
+                goInstance = go;
+            }
+            return goInstance;
+        }
+
+        async function validatePerson(personJSONString) {
+            try {
+                await getGoInstance();
+                const isValid = window.validatePersonJSON(personJSONString);
+    
+                if (isValid) {
+                    const msg = "Person is valid!"
+                    console.log(msg);
+                } else {
+                    const msg = "Validation error occurred!"
+                    console.error(msg);
+                }
+            } catch (error) {
+                console.error("Failed to call calidation properly", error)
+            }
+        }
+
+        async function runValidation() {
+            const personJSON = {
+                name: "John Doe",
+                age: 30,
+                email: "john@example.com"
+            };
+            const personJSONString = JSON.stringify(personJSON);
+            await validatePerson(personJSONString);
+        }
+
+        runValidation();
+    </script>
+</body>
+
+</html>
