@@ -8,6 +8,7 @@
 </head>
 
 <body>
+    <div id="validation-result"></div>
     <script src="wasm_exec.js"></script>
     <script>
         let goInstance = null;
@@ -28,12 +29,16 @@
             try {
                 await getGoInstance();
                 const isValid = window.validatePersonJSON(personJSONString);
-    
+                const resultContainer = document.getElementById('validation-result');
                 if (isValid) {
                     const msg = "Person is valid!"
+                    resultContainer.textContent = msg;
+                    resultContainer.style.color = "green";
                     console.log(msg);
                 } else {
                     const msg = "Validation error occurred!"
+                    resultContainer.textContent = msg;
+                    resultContainer.style.color = "red";
                     console.error(msg);
                 }
             } catch (error) {
