@@ -28,7 +28,7 @@
         async function validatePerson(personJSONString) {
             try {
                 await getGoInstance();
-                const isValid = window.validatePersonJSON(personJSONString);
+                const isValid = window.bam_validatePersonJSON(personJSONString);
                 const resultContainer = document.getElementById('validation-result');
                 if (isValid) {
                     const msg = "Person is valid!"
