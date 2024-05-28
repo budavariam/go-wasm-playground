@@ -23,6 +23,11 @@ func (p *Person) Validate() error {
 	)
 }
 
+// This directive is for [tinygo](https://tinygo.org/getting-started/install/).
+// For go global functions should be fine
+// https://stackoverflow.com/questions/67978442/go-wasm-export-functions
+//
+//export validatePersonJSON
 func validatePersonJSON(this js.Value, args []js.Value) interface{} {
 	personJSON := args[0].String()
 	var person Person
@@ -40,6 +45,6 @@ func validatePersonJSON(this js.Value, args []js.Value) interface{} {
 }
 
 func main() {
-	js.Global().Set("validatePersonJSON", js.FuncOf(validatePersonJSON))
+	js.Global().Set("bam_validatePersonJSON", js.FuncOf(validatePersonJSON))
 	select {}
 }
